@@ -1,0 +1,2751 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>css预处理器 - 老调新弹</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/solarized.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/solarized_dark.css">
+		<link rel="stylesheet" href="fontello/css/fontello.css">
+		<link rel="stylesheet" href="css/index.css">
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section data-markdown>
+
+					<script type="text/template">
+					# css 预处理器
+					### 老调“新”弹
+					</script>
+				</section>
+				<section data-markdown style='text-align:left'>
+
+					<script type="text/template">
+
+## Hi, 我叫 郑海波
+
+-----
+
+<span class='icon-github'></span> [@leeluolee](http://github.com/leeluolee)
+
+<span class='icon-sina-weibo'></span> [@拴萝卜的棍子](http://weibo.com/luobolee)
+
+<span class='icon-vcard'></span> 华中科技大学
+
+<span class='icon-location'></span> 网易杭州 - 前端技术部
+
+					</script>
+				</section>
+
+				<section data-markdown >
+					<script type="text/template">
+					### 我写过一个预处理器 
+
+					# MCSS 
+
+					<span class='icon-github'> [http://github.com/leeluolee/mcss](http://github.com/leeluolee/mcss)
+
+					![star](./assert/star.png)  <!-- .element: class="fragment" data-fragment-index="1" -->
+
+					</script>
+
+				</section>
+
+					<section data-markdown style='text-align:left;padding-left: 100px;'>
+
+						<script type="text/template">
+
+## CSS 的 "罪"
+
+- 变量 	 
+- 函数
+- 逻辑/循环
+- 前缀
+- 运算/表达式
+- ...
+
+-----
+
+<h2 class='fragment hlt hlt-abs' data-fragment-index=1>抽象能力</h2>
+
+[1] [http://www.zhihu.com/question/31247770](http://www.zhihu.com/question/31247770)
+
+
+						</script>
+					</section>
+
+					<section data-markdown>
+
+						<script type="text/template">
+
+##什么是抽象能力
+
+> Abstraction tries to reduce and factor out details so that the programmer can focus on a few concepts at a time.
+
+<br/>
+
+- 抽离细节<!-- .element: class="fragment"  -->
+- 减少关注点<!-- .element: class="fragment"  -->
+
+						</script>
+					</section>
+					<section data-markdown>
+
+						<script type="text/template">
+
+## CSS中的抽象: Cascading
+
+<br/>
+
+```html
+
+<div class='m-layer m-layer-bg m-layer-primary  z-show'>
+	Cascading 是CSS的灵魂， 也是限制预处理能力的 “关键点”
+</div>
+
+
+```
+
+<br/>
+
+``` shell
+.m-layer{...}
+.m-layer-bg{...}
+.m-layer-primary{...}
+.z-show{...}
+```
+
+
+
+
+						</script>
+					</section>
+
+					<section data-markdown >
+
+						<script type="text/template">
+
+![datui](assert/datui.jpg)
+
+<h3 class='fragment icon-emo-unhappy' data-fragment-index=2>无独立抽象能力</h3>
+
+						</script>
+					</section>
+					<section data-markdown>
+
+						<script type="text/template">
+
+## 预处理器
+
+> “An preprocessor is a program that processes its input to produce output that is used as input to another program ”
+	
+
+
+						</script>
+					</section>
+					<section data-markdown>
+
+						<script type="text/template">
+
+	
+## CSS预处理器
+
+<span class="icon-quote-left"></span>处理特定格式源文件到目标css的处理程序<span class="icon-quote-right"></span>
+
+<img class='fragment'  data-fragment-index=1 src="./assert/css-preprocessor.jpg" alt="" />
+
+						</script>
+					</section>
+					<section>
+					<section data-markdown>
+
+						<script type="text/template">
+### 编译前
+
+```scss
+
+$color-primary = #de12ec;
+
+.m-layer{
+
+  background-color: $color-primary;
+	&:hover{
+		background-color: l-adjust($color-primary, -10%);
+	}
+}
+
+```
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+						</script>
+					</section>
+					<section data-markdown>
+
+						<script type="text/template">
+### 编译后
+
+```scss
+
+.m-layer{
+	background-color:#de12ec;
+}
+.m-layer:hover{
+	background-color:#b10ebd;
+}
+
+```
+
+						</script>
+					</section>
+				</section>
+
+<section data-markdown>
+
+	<script type="text/template">
+
+## 预处理器的进化论
+
+<br/>
+
+![进化论](./assert/jinhua.jpg)
+
+	</script>
+
+</section>
+<section>
+<section data-markdown>
+
+	<script type="text/template">
+
+## 蛮荒时代 (模板)
+
+
+```ejs
+body {
+
+	left: <%= left %>px;
+	color: <%= color|highlight: 10% %>;
+
+}
+```
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+	</script>
+
+</section>
+<section data-markdown>
+
+	<script type="text/template">
+
+### 模板的缺陷
+
+1. 对CSS是无知的
+2. 错误难以追踪
+3. 难以维护
+
+
+<aside class="notes">
+-嵌套
+-格式化
+</aside>
+
+	</script>
+
+</section>
+</section>
+
+<section>
+<section data-markdown>
+
+	<script type="text/template">
+
+##  陶器时代 (非CSS语法) 
+
+<img src="assert/sass.svg" class='img-void' alt="" width=120 />
+
+
+```sass
+// Variable
+!primary-color= hotpink
+
+// Mixin
+=border-radius(!radius)
+    -webkit-border-radius= !radius
+    -moz-border-radius= !radius
+    border-radius= !radius
+
+.my-element
+    color= !primary-color
+    width= 100%
+    overflow= hidden
+
+.my-other-element
+    +border-radius(5px)
+
+
+```
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+
+
+	</script>
+</section>
+<section aligh=left data-markdown>
+	<script type="text/template">
+
+### 特点
+
+
+- 基于缩进的语言简洁， 但是可控性差
+- 对于前端开发不友好
+- **已经实现了对CSS的感知**
+
+
+	</script>
+</section>
+
+</section>
+
+<section>
+<section data-markdown>
+<script type='text/template'>
+
+## 青铜时代 ( CSS超集 )
+
+
+- LESS - SCSS - Stylus <strong style='color: red'>*</strong> - <strong class="fragment" data-fragment-index="1">Roole - MCSS</strong>
+
+```scss
+nav {
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li { display: inline-block; }
+
+  a {
+    display: block;
+    padding: 6px 12px;
+    text-decoration: none;
+  }
+}
+
+```
+<!-- .element: class="fragment" data-fragment-index="2" -->
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+</script>
+</section>
+
+
+<section data-markdown>
+<script type='text/template'>
+
+### CSS超集的特点
+
+- 对前端更友好
+- 不基于缩进， 不简洁但更安全
+- 与自定义DSL同样强大的语言能力
+- 可以直接使用css书写
+
+</script>
+</section>
+</section>
+
+
+<section data-markdown>
+
+	<script type='text/template'>
+
+<h3>其实分享范围原本就这么多...</h3>
+
+<br />
+
+<p class='fragment' data-fragment-index = 1><span class="icon-quote-left"></span>对 CSS 预<strong style='color:red'>后处理</strong>**有较多经验，写过 MVx ** 框架的郑海波 <span class="icon-quote-right"></span> - _@裕波于w3ctech_ </p>
+<img class='fragment' width=200 data-fragment-index=2 src="./assert/ninzhong.png" alt="" />
+
+
+	</script>
+
+
+</section>
+
+<section>
+<section data-markdown>
+<script type='text/template'>
+
+## 钢铁时代 (“纯”css语法)
+
+“严格遵守css语法的提供额外能力的CSS预处理器”
+
+<br />
+
+-  postcss: <span class='icon-github'></span>https://github.com/postcss
+<!-- .element: class="fragment shrink" data-fragment-index="2" -->
+-  rework:  <span class='icon-github'></span>https://github.com/reworkcss
+
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+</script>
+</section>
+
+
+<section data-markdown>
+<script type='text/template'>
+
+## <img src="./assert/postcss.svg" width=72 class='img-void' alt="" /> postcss简介
+
+```
+npm install postcss --save-dev
+```
+
+<br />
+postcss其实只是个平台, 它提供解析器， AST便利操作， SourceMap和翻译器, 具体功能由插件实现.
+- 
+
+
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+</script>
+
+</section>
+<section data-markdown>
+<script type='text/template'>
+
+## 官方范例
+
+```js
+
+var postcss = require('postcss');
+
+postcss([ 
+		// 允许你使用"阉割版"的未来的CSS特性
+		require('cssnext')(), 
+		// 一个高级的css压缩器
+		require('cssnano')() 
+		])
+  .process(css, { from: 'src/app.css', to: 'app.css' })
+  .then(function (result) {
+  		// 写入变换后的css文件
+      fs.writeFileSync('app.css', result.css);
+      // sourmap文件
+     if ( result.map ) fs.writeFileSync('app.css.map', result.map);
+
+  });
+
+```
+
+<h4 class='icon-attention-circled f-nt fragment'>POSTCSS正在渐渐成为预处理器中的 **jQuery**</h4>
+
+
+</script>
+
+</section>
+</section>
+<section data-markdown>
+<script type='text/template'>
+
+# Common Feature
+
+<h4 class="icon-right-open">代表使用预处理器过程的基本需求</h4>
+
+<aside class="notes">
+-不能忽视这种需求
+</aside>
+
+
+</script>
+
+</section>
+
+<section data-markdown >
+<script type='text/template'>
+
+## <span class='icon-diamond'></span> Nesting
+
+- Rule嵌套* <!-- .element: class="fragment" data-fragment-index="1" -->
+- &符号* <!-- .element: class="fragment" data-fragment-index="2" -->
+- @media嵌套 <!-- .element: class="fragment" data-fragment-index="2" -->
+
+
+
+</script>
+
+</section>
+<section>
+
+<section data-markdown>
+<script type='text/template'>
+## Before Compile
+
+```css
+.m-nav{
+	.list{
+		padding: 10px;
+	}
+	.link{
+		color: red;
+		&:hover{
+			color: green;
+		}
+	}
+
+}
+```
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+</script>
+</section>
+<section data-markdown>
+<script type='text/template'>
+
+## After Compile
+
+```css
+.m-nav .list{
+	padding:10px;
+}
+.m-nav .link{
+	color:#f00;
+}
+.m-nav .link:hover{
+	color:#008000;
+}
+```
+
+
+</script>
+
+</section>
+</section>
+<section data-markdown>
+<script type='text/template'>
+
+## 未被采纳的标准
+
+http://discourse.wicg.io/t/css-nesting-specification/839
+
+
+<pre><code contenteditable>
+.m-nav{{
+  .list{
+    padding: 10px;
+  }
+  .link{
+    color: red;
+    {
+      &:hover{
+        color: green;
+      }
+    }
+  }
+}}
+</code></pre>
+
+<span class='icon-emo-sleep'>我只能说欣赏不了</span>
+
+
+
+</script>
+
+</section>
+
+
+
+<section data-markdown>
+	<script type='text/template'>
+
+## <img src="./assert/postcss.svg" width=72 class='img-void' alt="" /> postcss-nesting 
+
+####  <span class="icon-emo-unhappy"> 实现未标准化的css-nesting
+<span class="icon-github"></span>[https://github.com/postcss/postcss-nesting](https://github.com/postcss/postcss-nesting)
+
+	</script>
+</section>
+
+
+<section data-markdown>
+	<script type='text/template'>
+
+## <img src="./assert/postcss.svg" width=72 class='img-void' alt="" /> postcss-nested 
+#### <span class="icon-emo-thumbsup"> &nbsp; 与SCSS等一致的嵌套语法</span>  
+
+
+<span class="icon-github"></span>[https://github.com/postcss/postcss-nested](https://github.com/postcss/postcss-nested)
+
+	</script>
+</section>
+
+<section>
+<section data-markdown>
+	<script type='text/template'>
+
+## <span class="icon-magic"></span> Nesting 建议
+
+嵌套尽量不要超过3层, 否则...
+
+<img class='fragment bounceIn' style='border:none'  src="./assert/bomb.gif" alt="bomb" />
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+	</script>
+</section>
+<section data-markdown>
+	<script type='text/template'>
+
+<h3 align=left><span class="icon-attention"></span>不要尝试与html对应</h3>
+
+```scss
+.m-practiceview{
+  .m-viewhead{
+    .header{
+      padding:20px;
+      .phases{
+        margin-top:25px;
+        .u-selectex{
+          .head{
+            height:40px;
+            border-radius:20px;
+            padding: 0 20px 0 17px;
+            .toggle{
+              line-height:40px;
+              .arr{
+                font-size:18px;
+                margin-left:30px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+```
+
+<img class='fragment' data-fragment-index=1 style='position:absolute; top: 20px;right:20px;left:20px;bottom:20px' src="./assert/nested.jpg" alt="" />
+
+<aside class="notes">
+- 真实项目
+</aside>
+
+
+
+	</script>
+</section>
+<section data-markdown>
+	<script type='text/template'>
+
+
+<h3 align=left><span class="icon-attention"></span> 使用选择器提升</h3>
+
+<table class='m-compare'>
+<tr>
+<td>
+<pre>
+<code>
+.m-layer{
+	.cnt{
+		.nav{
+			.bar{
+				padding: 10px;
+			}
+		}
+	}
+}
+</td>
+<td class='arrow'>
+<div class="icon-right-open"></div>
+</td>
+<td class='fragment' data-fragment-index=1>
+<pre>
+<code>
+
+.m-layer{
+
+	.layer_bar{
+		padding: 10px;
+	}
+
+}
+
+
+</pre>
+</code>
+</td>
+</tr>
+</table>
+
+<aside class="notes">
+- 确实有冲突危险
+</aside>
+
+
+	</script>
+</section>
+<section data-markdown>
+	<script type='text/template'>
+
+
+
+<h3 align=left><span class="icon-attention"></span> 尽量避免深层选择器序列</h3>
+
+```css
+div, p, span, ul{
+	div, p, span, ul{
+		div, p, span, ul{
+			left: 10px;
+		}
+	}
+}
+```
+
+<pre class='fragment' data-fragment-index=1 style='position:absolute; top: -120px;right:20px;left:20px;bottom:20px' >
+<code >
+div div div,
+p div div,
+span div div,
+ul div div,
+div p div,
+p p div,
+span p div,
+ul p div,
+div span div,
+p span div,
+span span div,
+ul span div,
+div ul div,
+p ul div,
+span ul div,
+ul ul div,
+div div p,
+p div p,
+span div p,
+ul div p,
+div p p,
+p p p,
+span p p,
+ul p p,
+div span p,
+p span p,
+span span p,
+ul span p,
+div ul p,
+p ul p,
+span ul p,
+ul ul p,
+div div span,
+p div span,
+span div span,
+ul div span,
+div p span,
+p p span,
+span p span,
+ul p span,
+div span span,
+p span span,
+span span span,
+ul span span,
+div ul span,
+p ul span,
+span ul span,
+ul ul span,
+div div ul,
+p div ul,
+span div ul,
+ul div ul,
+div p ul,
+p p ul,
+span p ul,
+ul p ul,
+div span ul,
+p span ul,
+span span ul,
+ul span ul,
+div ul ul,
+p ul ul,
+span ul ul,
+ul ul ul {
+  left: 10px;
+}
+</code>
+</pre>
+
+
+
+<aside class="notes">
+怎么解决?
+</aside>
+	</script>
+
+</section>
+
+</section>
+
+<section data-markdown class='f-tl1'>
+<script type='text/template'>
+
+## <span class="icon-diamond">变量</span>
+
+- 标示符* <!-- .element: class="fragment" data-fragment-index="1" -->
+- 赋值操作符* <!-- .element: class="fragment" data-fragment-index="2" -->
+- 变量使用 <!-- .element: class="fragment" data-fragment-index="3" -->
+- 作用域 <!-- .element: class="fragment" data-fragment-index="4" -->
+
+
+</script>
+</section>
+				
+
+<section data-markdown>
+<script type='text/template'>
+## MCSS中的变量
+
+三个赋值符: **'='**, **'?='**, **'^='**
+
+```scss
+$left = 10px;
+
+body{
+  left: $left;
+}
+
+// 默认值
+$left ?= 10px;
+
+body{
+
+  // 变量提升到顶层作用域
+  $left ^= 10px; 
+}
+```
+</script>
+</section>
+
+<section>
+<section data-markdown>
+<script type='text/template'>
+## <img src="./assert/w3c.png" width=120 class='img-void' alt="" /> 变量规范
+
+### custom-properties
+
+[https://drafts.csswg.org/css-variables/](https://drafts.csswg.org/css-variables/)
+
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+</script>
+</section>
+
+<section data-markdown>
+<script type='text/template'>
+
+### 范例
+
+<table class='m-compare'>
+<tr>
+<td>
+<pre>
+<code>
+:root{
+  --left-padding: 10px;
+}
+
+body{
+  padding-left: var(--left-padding);
+}
+</td>
+<td class='arrow'>
+≈
+</td>
+<td class='fragment' data-fragment-index=1>
+<pre>
+<code>
+body{
+	
+	padding-left: 10px
+
+}
+</td>
+</tr>
+</table>
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+</script>
+</section>
+
+
+<section data-markdown>
+	<script type='text/template'>
+
+## Brower Support
+
+![img](./assert/var-spec.png)
+
+:: 其实积极又悲催的FF早在FF29就实现了变量
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+	</script>
+</section>
+
+<section data-markdown data-background='#002b36'>
+	<script type='text/template'>
+<h1 style='color: #fff'>DEMO</h1>
+
+	</script>
+</section>
+<section data-markdown>
+	<script type='text/template'>
+
+## “$” VS  规范
+
+- 规范提供了强大的运行时
+- 规范不依赖build机制
+- “$”更易于使用
+- “$”是独立静态的 更易于理解
+
+	</script>
+</section>
+
+</section>
+
+
+<section data-markdown>
+	<script type='text/template'>
+
+## <img src="./assert/postcss.svg" width=72 class='img-void' alt="" /> postcss-custom-properties 
+
+####  <span class="icon-emo-unhappy"> custom-properties 的阉割实现
+
+
+- 只允许在:root 定义参数
+- 不支持运行时修改参数
+
+<span class="icon-github"></span>[https://github.com/postcss/postcss-custom-properties](https://github.com/postcss/postcss-custom-properties)
+
+
+	</script>
+</section>
+
+<section data-markdown>
+	<script type='text/template'>
+
+## <img src="./assert/postcss.svg" width=72 class='img-void' alt="" /> postcss-simple-vars 
+#### <span class="icon-emo-thumbsup"> &nbsp; 与SCSS一致的变量实现</span>  
+
+
+<span class="icon-github"></span>[https://github.com/postcss/postcss-simple-vars](https://github.com/postcss/postcss-simple-vars)
+
+	</script>
+</section>
+
+
+
+
+<section>
+<section data-markdown>
+	<script type='text/template'>
+
+## <span class="icon-magic">变量最佳实践</span>
+
+<br />
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+	</script>
+</section>
+<section data-markdown>
+	<script type='text/template'>
+
+### <span class="icon-attention">变量名要达意</span>
+
+```
+// BAD
+$fs1 = 14px;
+$fs2 = 16px;
+$fs3 = 18px;
+$fc0 = #253443;/* 主色1 */
+$fc1 = #153c3d;/* 主色2 */
+$fc2 = #777 ;/* 灰色 */
+
+// GOOD
+$fsize-base  = 14px;
+$fsize-small = 12px;
+$fsize-big 	 = 16px;
+$color-primary = #253443;
+$color-inverse = #153c3d;
+$color-gray 	 = #777;
+
+```
+
+<aside class="notes">
+- 精简Selector的习惯
+</aside>
+
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+</script>
+</section>
+<section data-markdown>
+	<script type='text/template'>
+
+### <span class="icon-attention">全局变量集中管理</span>
+
+- Rule更易于迁移
+- 变量更易于查找管理
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+</script>
+</section>
+<section data-markdown>
+	<script type='text/template'>
+
+### <span class="icon-attention">私有变量声明在模块内</span>
+
+```sass;
+.m-module{
+	$gap = 32px;
+	.side{
+		margin-right: $gap;
+	}
+}
+```
+
+- 减少变量冲突
+- 同样便于管理与迁移
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+</script>
+</section>
+<section data-markdown>
+	<script type='text/template'>
+
+### <span class="icon-attention">必须统一管理z-index</span>
+
+```scss
+// z-index config:
+$modal-index = 1000;
+$dropdown-index = 100;
+$mask-index = $modal-index - 10;
+
+```
+
+
+
+</script>
+</section>
+</section>
+
+
+<section data-markdown >
+<script type='text/template'>
+
+## <span class="icon-diamond">函数</span>
+
+函数是可复用片段的封装, 可以通过参数控制输出
+
+- 类型  <!-- .element: class="fragment" data-fragment-index="1" -->
+	- 输出结构的Mixin * 
+	- 返回值的Function
+- 参数 <!-- .element: class="fragment" data-fragment-index="2" -->
+	- 缺省值 *
+	- 块传入 * 
+	- 命名参数
+	- rest参数
+
+</script>
+</section>
+
+<section>
+<section data-markdown>
+<script type='text/template'>
+## MCSS中的函数
+
+
+- 定义不区分mixin与function
+- 依@return区分mixin与function
+- 支持所有参数功能
+- 函数是个“值”
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+</script>
+</section>
+
+<section data-markdown>
+<script type='text/template'>
+## Mixin
+
+
+<span class='icon-wrench'></span>http://leeluolee.github.io/mcss/
+
+```scss
+$box = ($width = 200px, $height){
+  $height ?= $width; 
+  height: $height;
+  width: $width;
+}
+
+.m-box {
+  $box(10px);
+}
+// 支持 transparent 调用
+.m-box-2{
+  $box: 200px, 100px;
+}
+
+```
+
+</script>
+</section>
+<section data-markdown>
+<script type='text/template'>
+## Function
+
+<span class='icon-attention-circled'></span>其实在MCSS里 “块” 就是个无参数的函数
+
+```scss
+$function-or-mixin = {
+  @return 10px;
+  top: 10px;
+}
+
+body{
+  left: $function-or-mixin();
+}
+
+```
+
+</script>
+</section>
+<section data-markdown>
+<script type='text/template'>
+
+#### <span class='icon-emo-happy'></span>函数支持传入
+
+```scss
+
+$btn = ($size, $decorator){
+	width: $size;
+	$decorator: $size;
+}
+
+$padding = ($size) {
+	padding: $size / 5;
+}
+
+body{
+	$btn: 10px, $padding;
+}
+
+```
+
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+</script>
+</section>
+<section data-markdown>
+<script type='text/template'>
+
+#### <span class='icon-emo-happy'></span>可返回并保留作用域(闭包)
+
+```scss
+$pos = ($position, $top, $left){
+    @if len($arguments) == 1{
+        @return ($top, $left){
+            $pos($position, $top, $left);
+        }
+    }
+    position: $position;
+    top: $top;
+    left: $left;
+}
+
+$fixed = $pos(fixed);
+$absolute = $pos(absolute);
+
+body{
+	$fixed: 10px, 20px;
+	$absolute: 10px, 20px;
+}
+
+```
+
+<span class="icon-attention-circled"></span> 是设计过度吗？ 
+
+</script>
+</section>
+</section>
+
+<section data-markdown>
+
+<script type='text/template'>
+
+## 未来的规范会支持mixin吗？ 
+
+<p>No， 但可曲线救国</p>
+
+
+
+</script>
+
+</section>
+
+<section data-markdown>
+<script type='text/template'>
+
+#### <span class="icon-magic"> 巧妙的利用参数</span>
+
+```
+.m-layer{
+  height: var(--height);
+  width: var(--width);
+  background-color: blue;
+}
+
+.m-layer-sm{
+  --height:  100px;
+  --width:  100px;
+}
+
+.m-layer-bg{
+  --height:  200px;
+  --width:  200px;
+}
+
+```
+
+:: 优劣?
+
+</script>
+</section>
+
+
+
+<section>
+<section data-markdown>
+	<script type='text/template'>
+
+## <img src="./assert/postcss.svg" width=72 class='img-void' alt="" /> postcss-mixins 
+
+####  <span class="icon-emo-happy"> 实现类似Sass的@mixin的功能
+
+
+<span class="icon-github"></span>[https://github.com/postcss/postcss-mixins](https://github.com/postcss/postcss-mixins)
+
+<br />
+<div class="icon-emo-surprised" style='text-decoration:underline; color: #888'>postcss的社区太恐怖了</div> 
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+	</script>
+</section>
+
+<section data-markdown data-background-transition="zoom">
+	<script type='text/template'>
+
+
+### css中描述
+
+
+```css
+// 定义
+@define-mixin icon $name{
+	&:after{
+		content: "";
+		background-url: url(/icons/$(name).png);
+	}
+}
+
+// 使用
+.search{
+	@mixin icon search;
+}
+
+```
+
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+	</script>
+</section>
+
+<section data-markdown>
+	<script type='text/template'>
+
+### postcss-mixins支持JS中定义
+
+```js
+
+require('postcss-mixins')({
+    mixins: {
+        clearfix: {
+            '&::after': {
+                content: '""',
+                display: 'table',
+                clear: 'both'
+            }
+        }
+    }
+})
+
+```
+
+: mixins实际上依赖了 postcss-simple-vars  和 postcss-nested 两个插件
+
+
+	</script>
+</section>
+</section>
+
+<section data-markdown>
+	<script type='text/template'>
+### <img src="./assert/postcss.svg" width=72 class='img-void' alt="" /> 社区内目前没有插件提供function支持
+
+	</script>
+</section>
+
+<section>
+<section data-markdown>
+	<script type='text/template'>
+
+## <span class="icon-magic">Mixin注意事项</span>
+
+<p>问题主要是围绕mixin会原封不动的输出结构这一特性</p>
+
+	</script>
+</section>
+<section data-markdown>
+	<script type='text/template'>
+
+- 提取多次使用相同参数的mixin结果到一个新规则
+
+```
+$clearfix = {
+    *zoom: 1;
+    &:before, &:after {
+        display: table;
+        content: "";
+        line-height: 0; 
+    }
+    &:after {
+        clear: both; 
+    }
+}
+
+.clearfix{
+	$clearfix();
+}
+
+```
+
+
+	</script>
+</section>
+<section data-markdown>
+	<script type='text/template'>
+
+- 不忘初心， 谨记Cascading这一支柱特性
+
+```css
+
+.m-blog{
+
+	$clearfix();
+}
+
+.m-blog-edit{
+
+	// 多余的声明
+	$clearfix();
+}
+//
+```
+
+```html
+
+<div class='m-blog m-blog-edit'></div>
+//
+
+```
+
+	</script>
+</section>
+
+</section>
+
+
+<section data-markdown >
+<script type='text/template'>
+
+## <span class="icon-diamond">继承@extend</span>
+
+</script>
+</section>
+
+<section>
+<section data-markdown data-background-transition='zoom'>
+<script type='text/template'>
+
+### Before Compile
+
+```scss
+.foo {
+    color: red;
+}
+
+.footer .foo {
+    font-weight: bold;
+}
+
+.bar {
+    @extend .foo;
+}
+```
+
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+</script>
+</section>
+<section data-markdown >
+<script type='text/template'>
+
+### After Compile
+
+```css
+
+.foo,.bar{
+	color:#f00;
+}
+.footer .foo{
+	font-weight:bold;
+}
+
+
+```
+
+<br />
+
+<strong class='fragment' data-fragment-index=1><span class="icon-attention-circled"></span>将selector合并到被@extend的rule的选择器列表中</strong>
+
+
+</script>
+</section>
+</section>
+
+<section>
+<section data-markdown >
+<script type='text/template'>
+
+<h2 style='text-transform:none'><span class="icon-leaf"></span> MCSS - 抽象Rule - @abstract</h2> 
+
+#### 脑补Sass中的placeholder( % ) 
+
+<br />
+
+<p class='f-quote fragment' >
+<span class="icon-quote-left"></span> 抽象Rule默认不输出， 但是可以被继承<span class="icon-quote-right"></span>
+</p>
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+</script>
+</section>
+
+<section data-markdown >
+<script type='text/template'>
+
+
+### 作用于单个rule
+
+```css
+
+@abstract foo{
+	color: red;
+}
+.bar { 
+	@extend foo;
+}
+
+```
+
+<p class='icon-down-big'>Compile</p>
+
+```css
+
+.bar{
+	color:red;
+}
+
+```
+
+
+<br />
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+</script>
+</section>
+<section data-markdown >
+<script type='text/template'>
+
+
+### 作用于一群rule!
+
+```css
+@abstract {
+
+// 不产生局部作用域
+
+	red{
+		color: red;
+	}
+
+	blue{
+		color: blue;
+	}
+}
+
+body {
+	@extend blue;
+}
+
+```
+
+
+
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+</script>
+</section>
+
+<section data-markdown >
+<script type='text/template'>
+
+
+### 作用于整个文件!!
+
+
+<table class='m-compare'>
+<tr>
+<td>
+<pre>
+<code>
+// file: some_module.mcss
+$left = 10px;
+
+$border = ($color = #ddd){
+	border: 1px solid $color;
+}
+.bar{ left: 20px}
+
+.foo { color: red; }
+
+</td>
+<td class='arrow' style='padding: 10px'>
++
+</td>
+<td >
+<pre>
+<code>
+// file: index.mcss
+@abstract 'some_module.mcss';
+
+.m-page{
+	@extend .foo;
+	padding-left: $left;
+	$border: red;
+}
+
+// 
+</td>
+</tr>
+</table>
+
+
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+</script>
+</section>
+
+<section data-markdown >
+<script type='text/template'>
+
+
+### After Compile
+
+
+```css
+
+.m-page{
+	color:#f00;
+}
+.m-page{
+	padding-left:10px;
+	border:1px solid #f00;
+}
+
+```
+
+
+<div class="icon-paper-plane">虽然文件内容不会输出， 但是仍然可以使用</div> 
+
+- 变量
+- 函数
+- @extend
+
+
+
+</script>
+</section>
+</section>
+
+
+<section>
+<section data-markdown>
+	<script type='text/template'>
+
+## <img src="./assert/postcss.svg" width=72 class='img-void' alt="" /> postcss-extend 
+####  提供类似Sass的继承功能</span>  
+
+
+<span class="icon-github"></span>[https://github.com/travco/postcss-extend](https://github.com/travco/postcss-extend)
+
+<span class="icon-github"></span>[https://github.com/davidtheclark/postcss-simple-extend](https://github.com/davidtheclark/postcss-simple-extend)
+
+
+	</script>
+</section>
+</section>
+
+
+
+<section data-markdown   data-background-transition="zoom" >
+<script type='text/template'>
+
+
+<h2 class="icon-magic">继承最佳实践</h2>
+
+<p class='icon-attention-circled'>了解@extend的作用机制是规避隐患的关键</p>
+
+</script>
+</section>
+<section data-markdown   data-background-transition="zoom" >
+<script type='text/template'>
+
+<h3 class="icon-attention f-nt" >勿将@extend作为Modifier使用</h3>
+
+<table class='m-compare'>
+<tr>
+<td>
+<pre>
+<code>
+// BAD
+
+.padding-modifier {
+	padding: 10px;
+}
+
+.btn{
+	padding: 5px;
+}
+
+.btn-pad{
+	@extend .padding-modifier;
+}
+</code>
+</pre>
+
+</td>
+<td class='arrow' style='padding: 10px'>
+VS
+</td>
+<td >
+<pre>
+<code>
+//  GOOD   
+
+$padding-modifier = {
+	padding: 10px;
+}
+
+.btn{
+	padding: 5px;
+}
+
+.btn-pad{
+	$padding-modifier();
+}
+
+</code>
+</pre>
+</td>
+</tr>
+</table>
+
+```
+<div class='btn btn-pad'></div>
+```
+
+</script>
+</section>
+
+
+<section>
+<section data-markdown  >
+<script type='text/template'>
+
+<h3 class="icon-attention f-nt" >避免在深层选择器序列中使用@extend</h3>
+
+
+
+```scss
+
+// BAD
+border{
+  border: 1px solid #fff;
+}
+p, div, span, strong{
+  p, div, span, ul, li {
+    div, section, article {
+      @extend border;
+    }
+    p{
+    	@extend border;
+    }
+  }
+}
+```
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+</script>
+</section>
+<section data-markdown  >
+<script type='text/template'>
+
+
+<h3>老师， 我的选择器炸了!</h3>
+
+
+
+```css
+
+border,
+p p div,
+p p section,
+p p article,
+p div div,
+p div section,
+p div article,
+p span div,
+p span section,
+p span article,
+p ul div,
+p ul section,
+p ul article,
+p li div,
+p li section,
+p li article,
+div p div,
+div p setion,
+div p article,
+div div div,
+div div section,
+div div article,
+div span div,
+div span section,
+div span article,
+div ul div,
+div ul section,
+div ul article,
+div li div,
+div li section,
+div li article,
+span p div,
+span p section,
+span p article,
+span div div,
+span div section,
+span div article,
+span span div,
+span span section,
+span span article,
+span ul div,
+span ul section,
+span ul article,
+span li div,
+span li section,
+span li article,
+strong p div,
+strong p section,
+strong p article,
+strong div div,
+strong div section,
+strong div article,
+strong span div,
+strong span section,
+strong span article,
+strong ul div,
+strong ul section,
+strong ul article,
+strong li div,
+strong li section,
+strong li article,
+p p p,
+p p pre,
+p div p,
+p div pre,
+p span p,
+p span pre,
+p ul p,
+p ul pre,
+p li p,
+p li pre,
+div p p,
+div p pre,
+div div p,
+div div pre,
+div span p,
+div span pre,
+div ul p,
+div ul pre,
+div li p,
+div li pre,
+span p p,
+span p pre,
+span div p,
+span div pre,
+span span p,
+span span pre,
+span ul p,
+span ul pre,
+span li p,
+span li pre,
+strong p p,
+strong p pre,
+strong div p,
+strong div pre,
+strong span p,
+strong span pre,
+strong ul p,
+strong ul pre,
+strong li p,
+strong li pre {
+  border: 1px solid #fff;
+}
+
+```
+
+
+- 车祸现场 : https://github.com/sass/sass/issues/12
+
+</script>
+</section>
+
+
+
+</section>
+
+<section data-markdown >
+<script type='text/template'>
+
+
+<h3 class="icon-attention f-nt" >@extend统一写在块顶部</h3>
+
+```css
+
+// GOOD
+.foo{
+	@extend bar;
+	@extend another;
+
+	left: 10px;
+}
+
+// BAD
+
+.foo{
+	@extend bar;
+	left: 10px;
+	@extend another;
+}
+
+```
+
+
+</script>
+</section>
+
+
+<section data-markdown>
+<script type='text/template'>
+
+
+<h3 class="icon-attention f-nt" >属性选择器来规避@extend</h3>
+
+```css
+[class^-"icon-"], [class*=" icon-"]{
+	&:before{
+
+		font-family: "fontello";
+		//....
+	}
+}
+
+.icon-emo-happy:before { content: '\e800'; } 
+```
+
+<div class="icon-down-big"></div>
+
+```
+<p class='icon-emo-happy'>有图标前缀的文字</p>
+```
+
+
+
+</script>
+
+</section>
+
+<section data-markdown>
+<script type='text/template'>
+
+
+<h3 class="icon-ok f-nt" >@extend的典型适合场景</h3>
+
+<p>
+作为 **基础结构** 连接一系列 **本质上相关** 的规则
+</p>
+<!-- .element: class="fragment" data-fragment-index="1" -->
+
+```css
+// 基础结构
+btn{
+	border: 1px solid #ccc;
+	padding: .5em;
+
+	border-radius: 5px;
+}
+
+.btn-primary{
+	@extend btn;
+	background-color: $color-primary;
+}
+
+// btn-primary 与 btn-inverse 是本质相关的一类事物
+.btn-inverse{
+	@extend btn;
+	background-color: $color-inverse;
+}
+
+```
+<!-- .element: class="fragment" data-fragment-index="2" -->
+
+
+
+</script>
+
+</section>
+
+
+<section data-markdown>
+<script type='text/template'>
+
+<h2 class="f-nt">mixin 和 @extend</h2>
+
+1. 两者本质都是块的抽象   <!-- .element: class="fragment"-->
+2. mixin有参数上的灵活性, 但会输出冗余声明<!-- .element: class="fragment"-->
+3. @extend可以避免冗余, 但是可能会出现错误<!-- .element: class="fragment"-->
+4. 新人完全可以暂时不使用@extend<!-- .element: class="fragment"-->
+5. 使用mixin与@extend,仍要谨记BEM等css组织策略<!-- .element: class="fragment"-->
+
+</script>
+</section>
+
+<section data-markdown >
+<script type='text/template'>
+
+<h2 class='f-nt icon-diamond'>@import内联引入</h2>
+
+</script>
+</section>
+<section data-markdown >
+<script type='text/template'>
+
+<h3 class='f-nt'>CSS的@import</h3>
+
+http://www.stevesouders.com/blog/2009/04/09/dont-use-import/
+
+- 会产生额外请求
+- 会比link的方式需要更多时间加载
+
+</script>
+</section>
+
+<section>
+<section data-markdown >
+<script type='text/template'>
+
+<h3 class='f-nt'>MCSS中的@import</h3>
+
+```
+// 默认css的不加载
+@import 'bootstrap.css';
+
+// 远程MCSS文件
+@import 'http://nec.netease.com/download/framework/mass/mass/index.mcss';
+
+// 常规引入
+@import 'btn';
+
+// import with media
+@import url('btn') screen and (max-height: 100px);
+
+// 块内import
+.m-markdown {
+  @import 'markdown';
+}
+```
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+</script>
+</section>
+<section data-markdown >
+<script type='text/template'>
+
+<h3 class='f-nt'>MCSS中的@import</h3>
+
+```
+@import  url("bootstrap.css");
+// ----
+.u-btn{
+  padding:10px;
+}
+//-----
+@media screen and (max-height: 100px){
+  .u-btn{
+    padding:10px;
+  }
+}
+// ----
+.m-markdown h1{
+  font-weight:bold;
+}
+.m-markdown p{
+  margin-bottom:20px;
+}
+
+
+```
+
+</script>
+</section>
+</section>
+
+<section data-markdown>
+	<script type='text/template'>
+
+## <img src="./assert/postcss.svg" width=72 class='img-void' alt="" /> postcss-import 
+
+<span class="icon-github"></span>[https://github.com/postcss/postcss-import](https://github.com/postcss/postcss-import)
+
+```css
+
+@import "cssrecipes-defaults"; 
+/* 相当于 @import "./node_modules/cssrecipes-defaults/index.css"; */
+
+@import "normalize.css/normalize"; 
+/* 相当于 @import "./bower_components/normalize.css/normalize.css"; */
+
+@import "css/foo.css"; 
+/* 正常的相对路径引入 */
+
+```
+
+	</script>
+</section>
+
+
+<section data-markdown >
+<script type='text/template'>
+
+<h2 class='f-nt icon-diamond'> 循环 @for </h2>
+
+批量处理逻辑
+
+</script>
+</section>
+
+<section data-markdown >
+<script type='text/template'>
+
+<h3 class="f-nt icon-leaf"> MCSS @for...of</h3>
+
+```scss
+$icons = ok warn danger ;
+
+@for $icon, $index of $icons{
+	.icon-#{$icon} {
+		background-image: url('/images/#{$icon}.png');
+	}
+}
+
+// output -->>
+.icon-ok{
+	background-image:url("/images/ok.png");
+}
+.icon-warn{
+	background-image:url("/images/warn.png");
+}
+.icon-danger{
+	background-image:url("/images/danger.png");
+}
+
+```
+
+
+</script>
+</section>
+
+<section data-markdown >
+<script type='text/template'>
+
+<h3 class="f-nt icon-leaf"> MCSS @for...in</h3>
+
+<p class="icon-attention-circled">用合法css值类型模拟Sass的Map</p>
+
+```scss
+$icons = 
+	ok      '\e800',
+	danger  '\e801',
+	warn    '\e802';
+
+@for $code, $icon in $icons{
+	.icon-#{$icon} {
+		content: $code;
+	}
+}
+// output -->>
+.icon-ok{
+	content:"\e800";
+}
+.icon-danger{
+	content:"\e801";
+}
+.icon-warn{
+	content:"\e802";
+}
+```
+
+
+</script>
+</section>
+
+
+<section data-markdown >
+<script type='text/template'>
+
+### Map强于List的原因竟然是? 
+
+<br />
+
+<p class='fragment'><span class="icon-quote-left"></span>可以多保存一维数据, 即key值<span class="icon-quote-right"></span></p>
+
+</script>
+</section>
+
+<section>
+<section data-markdown >
+<script type='text/template'>
+
+<h3 class='icon-leaf f-nt'>循环+函数 = 批量生成prefix函数</h3>
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+</script>
+</section>
+
+<section data-markdown >
+<script type='text/template'>
+
+<h3 class='f-nt'>核心: $prefixr</h3>
+
+封装生成前缀的逻辑
+
+```scss
+
+$prefixr = ($property,  $vendors, $value){
+
+  $vendors ?= webkit moz ms o;
+  //如果没有传入值， 则返回保存了$property 和 $vendors 设置的函数
+  @if $value == null {
+      @return {
+          @return $prefixr($property, $arguments, $vendors);
+      }
+  }
+  // 否则遍历输出
+  @for $vendor of $vendors {
+      #{'-' + $vendor + '-' + $property} : $value;
+  }
+  #{$property} : $value;
+}
+```
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+</script>
+</section>
+<section data-markdown >
+<script type='text/template'>
+
+<h3 class='f-nt'>prefix 配置map</h3>
+
+https://github.com/leeluolee/mass/blob/master/mass/css3.mcss#L11
+
+```scss
+
+$prefix-properties ?= 
+
+    transition-delay (webkit moz),
+    transition-duration (webkit moz),
+    transition-timing-function (webkit moz),
+    // ... 省略几十条
+    animation (webkit moz), 
+    animation-delay (webkit moz); 
+
+```
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+</script>
+</section>
+<section data-markdown >
+<script type='text/template'>
+
+<h3 class='f-nt'>批量生成</h3>
+
+
+
+```scss
+
+@for $vendors, $property in $prefix-properties {
+
+    define('$'+$property, $prefixr($property, null, $vendors));
+// OR ->  $('$'+$property) = $prefixr($property, null, $vendors)
+}
+
+body{
+	$transition: color .5s east-in-out;
+	$animation: bounceout .5s;
+	$box-shadow: 1px 1px #fff;
+	// ......以下省略几十条
+}
+
+
+```
+
+
+</script>
+</section>
+<section data-markdown >
+<script type='text/template'>
+
+<h3 class='f-nt'>mass: 利用mcss实现的纯css函数库</h3>
+
+<span class="icon-github"></span>[https://github.com/leeluolee/mass](https://github.com/leeluolee/mass)
+
+```css
+$swing(36deg); // swing动画
+
+$reset-normalize(); // normalize.css 
+
+.g-layout{
+	// 四栏中第二栏自适应， gap为30px的布局
+	$fixed-layout: 200px auto 100px 100px, 30px
+}
+
+
+
+```
+
+
+</script>
+</section>
+</section>
+
+
+<section data-markdown>
+	<script type='text/template'>
+
+## <img src="./assert/postcss.svg" width=72 class='img-void' alt="" /> postcss-each 
+#### <span class="icon-emo-thumbsup f-nt"> &nbsp; 与Sass一致的@each</span>  
+
+
+<span class="icon-github"></span>[https://github.com/outpunk/postcss-each](https://github.com/outpunk/postcss-each)
+
+	</script>
+</section>
+
+<section data-markdown>
+	<script type='text/template'>
+	### 将被点赞的postcss插件集中起来...
+	</script>
+</section>
+
+<section data-markdown>
+	<script type='text/template'>
+
+## <img src="./assert/postcss.svg" width=72 class='img-void' alt="" />precss 
+
+### 使用SCSS的语法来使用postcss??!!! </span>  
+
+
+<img class='fragment' src="./assert/tanqi.png" alt="" />
+
+<span class="icon-github"></span>[https://github.com/jonathantneal/precss](https://github.com/jonathantneal/precss)
+
+
+	</script>
+</section>
+
+<section data-markdown>
+	<script type='text/template'>
+
+## <img src="./assert/postcss.svg" width=72 class='img-void' alt="" />  <img src="./assert/cssnext.svg" width=272 class='img-void' alt="" />
+
+<h3 class='f-nt'> <span class="icon-quote-left"></span> Use tomorrow's CSS syntax, today<span class="icon-quote-right"></span></h3>
+
+
+	</script>
+</section>
+
+<section data-markdown>
+	<script type='text/template'>
+
+##  深入的聊聊postcss
+
+	</script>
+</section>
+
+<section>
+<section data-markdown>
+	<script type='text/template'>
+
+### 首先看下预处理器的流程分解
+
+	</script>
+</section>
+<section data-markdown>
+	<script type='text/template'>
+
+#### 常规预处理器大致流程
+
+![pre](./assert/pre-yuanli.png)
+
+即常规预处理器也可以操作标准CSS的AST来实现功能
+
+	</script>
+</section>
+
+<section data-markdown data-background='#002b36' data-background-transition='zoom'>
+	<script type='text/template'>
+<h1 style='color: #fff'>DEMO</h1>
+
+	</script>
+</section>
+<section data-markdown>
+	<script type='text/template'>
+
+#### postcss大致流程
+
+![pre](./assert/post-yuanli.png)
+
+	</script>
+</section>
+</section>
+
+
+<section>
+
+<section data-markdown>
+	<script type='text/template'>
+
+### 预处理器 or 后处理器??
+
+<br />
+
+<h4 class='fragment'>
+<span class='icon-quote-left'></span>当之无愧的预处理器<span class='icon-quote-right'></span>
+</h4>
+
+
+	</script>
+</section>
+
+<section data-markdown>
+<script type='text/template'>
+
+
+
+
+<ul>
+<li class="fragment">后处理器应该作用在是在运行时之后的: 如[fixed-sticky](https://github.com/filamentgroup/fixed-sticky), [prefixfree](https://github.com/LeaVerou/prefixfree)</li>
+<li class="fragment">postcss完全符合css预处理器的[定义](#/8) </li>
+</ul>
+
+
+
+
+</script>
+
+</section>
+</section>
+
+<section>
+<section data-markdown>
+	<script type='text/template'>
+
+### CSS超集  OR  标准CSS
+
+<br />
+
+<h4 class='fragment'>
+<span class='icon-quote-left'></span>应该是CSS超集<span class='icon-quote-right'></span>
+</h4>
+
+<h4 class='fragment'>
+那么多不符合规范的插件出卖了它   :)</span>
+</h4>
+
+
+
+	</script>
+</section>
+<section data-markdown>
+	<script type='text/template'>
+
+### 部分CSS syntax示意
+
+![img](./assert/rulelist.png)
+![img](./assert/dcla.png)
+
+
+	</script>
+</section>
+<section data-markdown>
+	<script type='text/template'>
+
+### POSTCSS 实现
+
+<table class='m-compare'>
+<tr>
+<td>
+<pre>
+<code>
+
+$left: 10px;
+$right: 10px;
+
+body {
+  left: $left;
+  h2 {
+    top: 20px;
+  }
+}
+
+</td>
+<td class='arrow'>
+<div class="icon-right-open"></div>
+</td>
+<td class='fragment' data-fragment-index=1>
+<pre>
+<code class='shell'>
+
+- stylesheet
+	- nodes
+		- declaration   	X 
+		- declaration   	X
+		- rule
+			- nodes
+				- declaration
+				- rule        X
+
+</td>
+</tr>
+</table>
+
+<h4  class="fragment icon-attention-circled">postcss在语法元素是符合标准的， 但在组合上没有遵守</h4> 
+
+	</script>
+</section>
+
+<section>
+
+<h3>下面是符合Syntax的设计</h3>
+
+<pre><code>
+:root{
+  --left: 10px;
+  --right: 10px;
+}
+
+body {
+  left: var(--left);
+  @nested {
+    h2 {
+      top: 20px;
+    }
+  }
+}
+</code></pre>
+
+
+<h4 class="icon-attention-circled">你会如何选择?</h4>
+
+
+
+
+
+</section>
+</section>
+<section>
+<section data-markdown>
+	<script type='text/template'>
+
+### post趋势
+
+
+||cssnext| precss|
+|---|---|---|
+|理念️| 基于未来的CSS | 自定义语义 |
+|star⭐️| **1590** |74|
+|issues| **26/127** | 8/6 |
+|版本| ** v1.8.2 ** | v0.3.0 |
+<!-- .element: class="fragment" data-fragment-index="1" -->
+
+<br />
+
+
+<h2 class='fragment'>BUT...</h2>
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+
+	</script>
+</section>
+
+<section data-markdown>
+	<script type='text/template'>
+
+### <span class="icon-attention"></span>规范变动的风险
+
+
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+
+
+	</script>
+</section>
+<section data-markdown>
+	<script type='text/template'>
+
+### 功能实现会严格受限于CSS标准
+
+- 看到钉子选锤子 VS  拿着锤子试钉子   
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+
+	</script>
+</section>
+<section data-markdown>
+	<script type='text/template'>
+
+### 实现会出现不一致
+
+<br />
+
+- 预处理器无法支持新规范附带的运行时功能
+- 可以预处理解决的一般都不会发布为新规范
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
+
+
+	</script>
+</section>
+<section data-markdown>
+	<script type='text/template'>
+
+### 影响与其它工具的协同
+
+
+
+
+
+	</script>
+</section>
+<section data-markdown>
+	<script type='text/template'>
+
+## <img src="./assert/postcss.svg" width=72 class='img-void' alt="" /> postcss-media-minmax 
+
+```css
+@media screen and (width <= 1200px) {
+  .bar {
+    display: block;
+  }
+}
+```
+
+
+<p class='fragment danger' data-fragment-index=1>你走的很快，  但却是Sass等预处理器无法承受的痛..</p>
+
+```bash
+Error: Invalid CSS after "...dth <= 1200px) ": expected media query list, was "{"
+        on line 1 of media.css
+
+1: @media screen and (width <= 1200px) {
+2:   .bar {
+3:     display: block;
+4:   }
+5: }
+```
+<!-- .element: class="fragment danger" data-fragment-index="2" -->
+
+<p class='fragment'><h2 class='icon-down-open animated pulse loop'></h2></p>
+	</script>
+</section>
+<section data-markdown data-background-transition='zoom'>
+	<script type='text/template'>
+
+
+<img class='gray fragment shrink' data-fragment-index=2  width=60% src="./assert/prepost.png" alt="" />
+
+
+<h2 class='fragment hlt hlt-abs hlt-gray' data-fragment-index=2>基情难续 <span class="icon-emo-unhappy"></span></h2>
+
+
+	</script>
+</section>
+</section>
+
+
+<section data-markdown>
+  <script type='text/template'>
+
+### POSTCSS的意义
+
+- 更接近CSS
+- 可靠&标准化的配套, 降低进入成本 <!-- .element: class="fragment"  -->
+  - 入口: AST解析 以及帮助函数 <!-- .element: class="fragment"  -->
+  - 出口: SourceMap & 翻译器 <!-- .element: class="fragment"  -->
+- 100%的插件化， 且极具规模 <!-- .element: class="fragment"  -->
+- 速度更快: 3x-30x  <!-- .element: class="fragment"  -->
+- 提高对新规范的关注度 <!-- .element: class="fragment"  -->
+
+
+  </script>
+</section>
+
+<section data-markdown data-background='./assert/background.jpg' data-background-transition='zoom'>
+	<script type='text/template'>
+	<h1 class="icon-emo-squint f-nt h1-lt" >postcss-mcss</h1> 
+	</script>
+</section>
+<section data-markdown data-background='#002b36' data-background-transition='zoom'>
+	<script type='text/template'>
+
+<h1 style='color:#fff'> <span class='icon-emo-happy'></span> Thank You</h1>
+
+----
+
+<h3 class='fragment' style='color:#fff'><span class="icon-attention-alt"></span>跪求前端 ( <a class=" f-nt" style='color: RED; font-family: 黑体' href='mailto://nehzwd@163.com'>nehzwd@163.com</a> )</h3> 
+
+
+
+	</script>
+</section>
+
+
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+				fragments: true,
+
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
+
+<section data-markdown>
+<script type='text/template'>
+</script>
+</section>
+
+<p><h2 class='icon-down-open animated pulse loop'></h2></p>
