@@ -1,6 +1,6 @@
 # Slide for css-conf in China
 
-See: [http://leeluolee.github.io/css-conf](leeluolee.github.io/css-conf)
+See: [http://leeluolee.github.io/css-conf](http://leeluolee.github.io/css-conf)
 
 ## Link
 
